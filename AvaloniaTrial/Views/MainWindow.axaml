@@ -3,15 +3,60 @@
         xmlns:vm="using:AvaloniaTrial.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+				xmlns:v="clr-namespace:AvaloniaTrial.Views"
+				xmlns:controls="using:AvaloniaTrial.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AvaloniaTrial.Views.MainWindow"
+				x:DataType="vm:MainWindowViewModel"
+				x:CompileBindings="True"
         Icon="/Assets/avalonia-logo.ico"
         Title="AvaloniaTrial">
 
-    <Design.DataContext>
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
+	<Design.DataContext>
+		<vm:MainWindowViewModel/>
+	</Design.DataContext>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+	<Grid Margin="5">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="2*"/>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="3*"/>
+		</Grid.ColumnDefinitions>
 
+		<Grid.Resources>
+			<v:ValueIsEvenConverter x:Key="ValueIsEvenConverter"/>
+		</Grid.Resources>
+
+		<ListBox Grid.Column="0" Items="{Binding Messages.Value}" SelectedItem="{Binding SelectedItem.Value}">
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+						<Border Padding="2" Margin="0 0 5 0" BorderBrush="LightGray" BorderThickness="1" CornerRadius="2">
+							<TextBlock Text="{Binding No}"/>
+						</Border>
+
+						<!--DataTriggerの代替 Classを動的に指定して，StyleのSelectorでそれを参照する-->
+						<TextBlock Text="{Binding Name}" VerticalAlignment="Center"
+											 Classes.isEven="{ReflectionBinding DataContext.Messages.Value.Count, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource ValueIsEvenConverter}}">
+							<TextBlock.Styles>
+								<Style Selector="TextBlock">
+									<Setter Property="Foreground" Value="Black"/>
+								</Style>
+								<Style Selector="TextBlock.isEven">
+									<Setter Property="Foreground" Value="Red"/>
+								</Style>
+							</TextBlock.Styles>
+						</TextBlock>
+					</StackPanel>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+
+		<GridSplitter Grid.Column="1" Width="5" Background="LightGray" Margin="0 5" VerticalAlignment="Stretch"/>
+
+		<controls:ItemDetailsView Grid.Column="2" Item="{Binding SelectedItem.Value}"/>
+
+		<Button Grid.Column="0" Content="Add Message" Command="{Binding AddMessageCommand}"
+						VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="5"/>
+	</Grid>
 </Window>
