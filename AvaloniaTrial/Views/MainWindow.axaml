@@ -3,6 +3,7 @@
         xmlns:vm="using:AvaloniaTrial.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+				xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
 				xmlns:v="clr-namespace:AvaloniaTrial.Views"
 				xmlns:controls="using:AvaloniaTrial.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -56,7 +57,12 @@
 
 		<controls:ItemDetailsView Grid.Column="2" Item="{Binding SelectedItem.Value}"/>
 
-		<Button Grid.Column="0" Content="Add Message" Command="{Binding AddMessageCommand}"
-						VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="5"/>
+		<Button Grid.Column="0" Command="{Binding AddMessageCommand}"
+						VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="5">
+			<StackPanel Orientation="Horizontal" >
+				<materialIcons:MaterialIcon Kind="Plus"/>
+				<TextBlock Text="Add Message"/>
+			</StackPanel>
+		</Button>
 	</Grid>
 </Window>
